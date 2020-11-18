@@ -1,0 +1,50 @@
+{
+    "version": 2,
+    "port": 8080,
+    "endpoints": [{
+            "endpoint": "/produce/{key}",
+            "method": "POST",
+            "backend": [{
+                "extra_config": {
+                    "github.com/devopsfaith/krakend-amqp/produce": {
+                        "exchange": "testdiuscoa",
+                        "durable": true,
+                        "delete": false,
+                        "exclusive": false,
+                        "no_wait": true,
+                        "mandatory": true,
+                        "immediate": false,
+                        "name": "radiuscoa",
+                        "routing_key": "Key"
+                    }
+                },
+                "host": [
+                    "amqp://guest:guest@localhost:5672"
+                ],
+                "disable_host_sanitize": true
+            }]
+        },
+        {
+            "endpoint": "/consume",
+            "backend": [{
+                "extra_config": {
+                    "github.com/devopsfaith/krakend-amqp/consume": {
+                        "name": "queue-1",
+                        "exchange": "testdiuscoa",
+                        "durable": true,
+                        "delete": false,
+                        "exclusive": false,
+                        "no_wait": true,
+                        "no_local": false,
+                        "routing_key": ["#"],
+                        "prefetch_count": 10
+                    }
+                },
+                "host": [
+                    "amqp://guest:guest@localhost:5672"
+                ],
+                "disable_host_sanitize": true
+            }]
+        }
+    ]
+}
